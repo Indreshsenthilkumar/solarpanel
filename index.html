@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarSquare | Interactive Experience Simulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Background Animation Canvas -->
+        <canvas id="bg-canvas"></canvas>
+
+        <!-- Dashboard Header -->
+
+        <header class="main-header">
+            <div class="logo">
+                <span class="logo-solar">Solar</span><span class="logo-square">Square</span>
+                <span class="badge">Experience Centre</span>
+            </div>
+            <button id="back-to-menu" class="back-btn hidden">← Main Menu</button>
+        </header>
+
+        <!-- Landing Page: The Two Boxes -->
+        <div id="landing-page" class="view-screen">
+            <div class="cards-container">
+                <div class="experience-card" id="btn-which-solar">
+                    <div class="card-icon">🔍</div>
+                    <h2>Which one is good solar?</h2>
+                    <p>Compare different panels and see their long-term financial impact.</p>
+                </div>
+                <div class="experience-card" id="btn-shadow-analysis">
+                    <div class="card-icon">☀️</div>
+                    <h2>Shadow Analysis</h2>
+                    <p>See how everyday conditions like dust and birds affect your generation.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Which Solar is Good -->
+        <div id="solar-selection-view" class="view-screen hidden">
+            <div class="solar-grid-container scrollable-area">
+
+                <h1 class="view-title">Pick a panel to inspect its quality</h1>
+                <div class="mystery-grid">
+                    <div class="panel-card-mystery" data-type="premium">
+                        <img src="/panel_premium.png" alt="Panel 1" class="panel-preview">
+                        <div class="mystery-tag">Solar Panel A</div>
+                    </div>
+                    <div class="panel-card-mystery" data-type="microcrack">
+                        <img src="/panel_defective.png" alt="Panel 2" class="panel-preview">
+                        <div class="mystery-tag">Solar Panel B</div>
+                    </div>
+                    <div class="panel-card-mystery" data-type="hotspot">
+                        <img src="/panel_defective.png" alt="Panel 3" class="panel-preview">
+                        <div class="mystery-tag">Solar Panel C</div>
+                    </div>
+                    <div class="panel-card-mystery" data-type="standard">
+                        <img src="/panel_premium.png" alt="Panel 4" class="panel-preview">
+                        <div class="mystery-tag">Solar Panel D</div>
+                    </div>
+                    <div class="panel-card-mystery" data-type="leaking">
+                        <img src="/panel_defective.png" alt="Panel 5" class="panel-preview">
+                        <div class="mystery-tag">Solar Panel E</div>
+                    </div>
+                    <div class="panel-card-mystery" data-type="solar-square">
+                        <img src="/panel_premium.png" alt="Panel 6" class="panel-preview">
+                        <div class="mystery-tag">Solar Panel F</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scanning Animation Overlay -->
+            <div id="scanning-overlay" class="fullscreen-overlay hidden">
+                <div class="scanner-wrap">
+                    <div class="scanning-panel-box">
+                        <img id="scanning-img" src="" alt="Scanning">
+                        <div class="scan-bar"></div>
+                        <div class="scan-laser"></div>
+                    </div>
+                    <div class="scan-status-text">PERFORMING ELECTROLUMINESCENCE SCAN...</div>
+                    <div class="scan-metrics">
+                        <div class="metric">CELL INTEGRITY: <span id="scan-integrity">---</span></div>
+                        <div class="metric">THERMAL LEAKAGE: <span id="scan-thermal">---</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Solar Result Screen (Full Page) -->
+        <div id="solar-result-screen" class="view-screen hidden">
+            <div class="result-experience-wrap">
+                <div class="result-content-layout">
+                    <div class="result-left-panel">
+                        <h2 id="solar-result-title">Premium A+ Grade</h2>
+                        <p id="solar-result-subtitle">This panel is in perfect condition with 100% efficiency.</p>
+                        <div class="el-display-frame">
+                            <canvas id="el-result-canvas"></canvas>
+                            <div class="el-overlay-label">ELECTROLUMINESCENCE X-RAY</div>
+                        </div>
+                    </div>
+
+                    <div class="result-right-panel">
+                        <div class="tv-card savings-card-dynamic">
+                            <h3 class="card-title">Projected Lifetime Savings</h3>
+
+                            <div class="tv-stat-group">
+                                <h1 id="annual-savings" class="tv-value-red">₹ 24,000</h1>
+                                <span class="tv-label">Annually</span>
+                            </div>
+
+                            <div class="tv-stat-group">
+                                <h1 id="lifetime-savings" class="tv-value-red">₹ 6,00,000</h1>
+                                <span class="tv-label">in a Lifetime</span>
+                            </div>
+
+                            <p class="tv-disclaimer">* All calculations assume a standard 5.24 kW system installation in
+                                Pune region.</p>
+                        </div>
+
+                        <div class="tv-card guide-card result-guide">
+                            <div class="guide-content">
+                                <p>Ready for the actual installation?</p>
+                                <strong>Contact our R&D Team &darr;</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Shadow Analysis Redesign -->
+        <div id="shadow-analysis-view" class="view-screen hidden">
+            <div class="shadow-experience-wrap">
+                <div class="impact-content-layout">
+
+                    <!-- Left Side: Graph & Title -->
+                    <div class="impact-main-area">
+                        <h1 class="image-title">Impact of Shadow on Generation</h1>
+
+                        <div class="graph-box-premium">
+                            <!-- Real-time Percentage Pill (Absolute inside graph) -->
+                            <div class="live-pill">
+                                <span class="pill-dot"></span>
+                                <span id="gen-pct">100</span>%
+                            </div>
+
+                            <canvas id="shadow-graph-canvas"></canvas>
+
+                            <!-- Axis Labels matching image -->
+                            <div class="axis-lbl-y">% Generation</div>
+                            <div class="axis-lbl-x">Time (Sec)</div>
+
+                            <!-- Interactive Panel Overlay (Draggable Area) -->
+                            <div id="panel-drop-zone" class="panel-drop zone-clean">
+                                <img src="/panel_premium.png" class="base-panel-img" alt="Panel">
+                                <div id="plate-on-panel" class="plate-on-panel"></div>
+                                <div class="drop-hint">DRAG PLATE HERE TO SEE IMPACT</div>
+                            </div>
+                        </div>
+
+                        <!-- Draggable Tray -->
+                        <div class="plate-tray-new">
+                            <div class="plate-item draggable" draggable="true" data-sample="dust">
+                                <img src="/dust_slide.png" alt="Dust">
+                                <div class="plate-name">Dust Layer</div>
+                            </div>
+                            <div class="plate-item draggable" draggable="true" data-sample="bird">
+                                <img src="/bird_slide.png" alt="Bird">
+                                <div class="plate-name">Bird Drops</div>
+                            </div>
+                            <div class="plate-item draggable" draggable="true" data-sample="leaf">
+                                <img src="/leaf_slide.png" alt="Leaf">
+                                <div class="plate-name">Dry Leaf</div>
+                            </div>
+                            <div class="plate-item reset-plate" data-sample="clear">
+                                <div class="reset-icon">↺</div>
+                                <div class="plate-name">Clean Panel</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: White TV Cards -->
+                    <div class="impact-details-area">
+                        <div class="tv-card main-stats">
+                            <p class="tv-intro">Solar Plants in India suffer from shadow losses of up to 25%*, causing
+                            </p>
+
+                            <div class="tv-stat-row">
+                                <h1 id="energy-loss" class="tv-value-red">1,100</h1>
+                                <span class="tv-label">Units/Year <br> Energy Loss</span>
+                            </div>
+
+                            <div class="tv-stat-row">
+                                <h1 id="money-loss" class="tv-value-red">₹ 13,400</h1>
+                                <span class="tv-label">/year <br> Savings Loss</span>
+                            </div>
+
+                            <p class="tv-disclaimer">
+                                *CEEW Report - 'kWh from kW': Insights from Field Visits in Delhi.<br>
+                                All calculations assume a 3.24 kW system
+                            </p>
+                        </div>
+
+                        <div class="tv-card guide-card">
+                            <div class="guide-content">
+                                <p>See what else reduces your generation.</p>
+                                <strong>Switch the plate to view &darr;</strong>
+                            </div>
+                            <div class="guide-image">
+                                <img id="guide-thumb" src="/panel_premium.png" alt="guide">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="footer">
+            <div class="status-bar">
+                <span>System Status: <span class="text-online">Optimized</span></span>
+                <span> Pune R&D Centre</span>
+            </div>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
