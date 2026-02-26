@@ -384,7 +384,10 @@ class ExperienceCentre {
     private renderGraph(ctx: CanvasRenderingContext2D) {
         const w = this.graphCanvas!.width;
         const h = this.graphCanvas!.height;
-        ctx.clearRect(0, 0, w, h);
+
+        // Fill dark background so canvas is never white
+        ctx.fillStyle = '#060e20';
+        ctx.fillRect(0, 0, w, h);
 
         // Grid lines (White subtle lines as in image)
         ctx.strokeStyle = 'rgba(255,255,255,0.15)';
@@ -414,9 +417,8 @@ class ExperienceCentre {
             else ctx.lineTo(x, y);
         });
         ctx.stroke();
-
-        // No area fill as requested for "simple" matching
     }
+
 
 }
 

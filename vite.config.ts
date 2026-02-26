@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  // Vanilla TS configuration
+  base: '/solarpanel/', // Required for GitHub Pages deployment
 })
-
