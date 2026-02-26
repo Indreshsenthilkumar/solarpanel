@@ -79,42 +79,104 @@ body {
     background: var(--brand-red);
 }
 
-/* Header */
+/* Header — Kondaas Brand Style */
 .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 3rem;
-    background: #ffffff;
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-sm);
+    padding: 0.75rem 2.5rem;
+    background: var(--brand-red);
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 2px 8px rgba(215, 25, 32, 0.4);
 }
 
-.logo {
+/* Brand Logo Wrapper */
+.brand-logo-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.brand-top-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.brand-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.brand-icon svg {
+    width: 42px;
+    height: 42px;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+.brand-text {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.brand-name-bold {
     font-size: 1.6rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--text-primary);
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    line-height: 1;
 }
 
-.logo-square {
-    color: var(--brand-red);
+.brand-divider {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 300;
+    line-height: 1;
 }
 
-.badge {
-    font-size: 0.65rem;
-    background: var(--brand-red);
-    color: #fff;
-    padding: 0.25rem 0.7rem;
-    border-radius: 50px;
-    margin-left: 0.75rem;
-    vertical-align: middle;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+.brand-name-light {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.92);
+    letter-spacing: 0.08em;
+    line-height: 1;
+}
+
+.brand-tagline {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.02em;
+    padding-left: 54px;
+    text-transform: none;
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .brand-name-bold {
+        font-size: 1.2rem;
+    }
+
+    .brand-name-light {
+        font-size: 0.9rem;
+    }
+
+    .brand-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .brand-tagline {
+        font-size: 0.65rem;
+        padding-left: 42px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -135,10 +197,10 @@ body {
 
 
 .back-btn {
-    background: #ffffff;
-    border: 1.5px solid var(--brand-red);
-    color: var(--brand-red);
-    padding: 0.55rem 1.4rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff;
+    padding: 0.5rem 1.3rem;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -149,14 +211,15 @@ body {
 
 @media (max-width: 480px) {
     .back-btn {
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.9rem;
         font-size: 0.8rem;
     }
 }
 
 .back-btn:hover {
-    background: var(--brand-red);
-    color: #ffffff;
+    background: #ffffff;
+    color: var(--brand-red);
+    border-color: #ffffff;
 }
 
 .footer {
