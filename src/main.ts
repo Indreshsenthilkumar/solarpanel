@@ -422,7 +422,40 @@ class ExperienceCentre {
 
 }
 
+
+/**
+ * BACK NAVIGATION LOCK
+ * Prevents the browser back button, Alt+Left, and swipe-back from working.
+ * Only the "Main Menu" button can navigate between views.
+ */
+function lockBrowserHistory() {
+    // Push a dummy state so there's always something to "go back" to
+    // that we control — this keeps us on the same page
+    history.pushState(null, '', window.location.href);
+
+    // Every time the browser tries to go back (popstate fires),
+    // immediately push our state again, trapping the user on this page
+    window.addEventListener('popstate', () => {
+        history.pushState(null, '', window.location.href);
+    });
+
+    // Block Alt + Left Arrow (browser back shortcut on Windows/Linux)
+    // Block Backspace key (browser back in some browsers when not in input)
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+        const tag = (e.target as HTMLElement).tagName;
+        const inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
+        if (e.altKey && e.key === 'ArrowLeft') {
+            e.preventDefault();
+        }
+        if (e.key === 'Backspace' && !inInput) {
+            e.preventDefault();
+        }
+    });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
+    lockBrowserHistory();
     new ExperienceCentre();
 });
 
