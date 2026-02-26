@@ -425,33 +425,57 @@ class ExperienceCentre {
 
 /**
  * BACK NAVIGATION LOCK
- * Prevents the browser back button, Alt+Left, and swipe-back from working.
+ * Prevents ALL forms of browser back navigation.
  * Only the "Main Menu" button can navigate between views.
  */
 function lockBrowserHistory() {
-    // Push a dummy state so there's always something to "go back" to
-    // that we control — this keeps us on the same page
-    history.pushState(null, '', window.location.href);
+    const url = window.location.href;
 
-    // Every time the browser tries to go back (popstate fires),
-    // immediately push our state again, trapping the user on this page
+    // Push 30 dummy states immediately so the back button
+    // would need to be pressed 30+ times to escape this page
+    for (let i = 0; i < 30; i++) {
+        history.pushState({ locked: true, i }, '', url);
+    }
+
+    // Every time popstate fires (back/forward pressed),
+    // immediately re-push 5 more states to re-trap the user
     window.addEventListener('popstate', () => {
-        history.pushState(null, '', window.location.href);
+        for (let i = 0; i < 5; i++) {
+            history.pushState({ locked: true }, '', url);
+        }
     });
 
-    // Block Alt + Left Arrow (browser back shortcut on Windows/Linux)
-    // Block Backspace key (browser back in some browsers when not in input)
+    // Block Alt + Left Arrow (Windows/Linux back shortcut)
+    // Block Backspace key (back in some browsers when not in an input)
+    // Block Mouse Button 4 (browser hardware back button on mice)
     window.addEventListener('keydown', (e: KeyboardEvent) => {
         const tag = (e.target as HTMLElement).tagName;
         const inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
 
-        if (e.altKey && e.key === 'ArrowLeft') {
+        if (e.altKey && (e.key === 'ArrowLeft' || e.key === 'Left')) {
             e.preventDefault();
+            e.stopPropagation();
         }
         if (e.key === 'Backspace' && !inInput) {
             e.preventDefault();
+            e.stopPropagation();
         }
-    });
+    }, true); // capture phase = catches it before anything else
+
+    // Block Mouse Button 3 & 4 (back/forward on some mice)
+    window.addEventListener('mousedown', (e: MouseEvent) => {
+        if (e.button === 3 || e.button === 4) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
+
+    // Block context menu on those buttons too
+    window.addEventListener('auxclick', (e: MouseEvent) => {
+        if (e.button === 3 || e.button === 4) {
+            e.preventDefault();
+        }
+    }, true);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
