@@ -57,35 +57,26 @@
             </div>
         </div>
 
-        <!-- Section 1: Which Solar is Good -->
+        <!-- Section 1: Automated Solar Selection -->
         <div id="solar-selection-view" class="view-screen hidden">
-            <div class="solar-grid-container scrollable-area">
+            <div class="solar-status-container">
+                <div class="status-card-premium" id="fetching-status">
+                    <div class="live-connection-badge">
+                        <span class="connection-dot"></span>
+                        LIVE LINK ESTABLISHED
+                    </div>
+                    <div class="pulse-loader">
+                        <div class="loader-inner"></div>
+                    </div>
+                    <h1 class="view-title-main">AWAITING COMMAND...</h1>
+                    <p class="status-subtitle text-cyan-glow">Monitoring Google Sheet for Active Panel Selection</p>
 
-                <h1 class="view-title">Pick a panel to inspect its quality</h1>
-                <div class="mystery-grid">
-                    <div class="panel-card-mystery" data-type="premium">
-                        <img src="/panel_premium.png" alt="Panel 1" class="panel-preview">
-                        <div class="mystery-tag">Solar Panel A</div>
-                    </div>
-                    <div class="panel-card-mystery" data-type="microcrack">
-                        <img src="/panel_defective.png" alt="Panel 2" class="panel-preview">
-                        <div class="mystery-tag">Solar Panel B</div>
-                    </div>
-                    <div class="panel-card-mystery" data-type="hotspot">
-                        <img src="/panel_defective.png" alt="Panel 3" class="panel-preview">
-                        <div class="mystery-tag">Solar Panel C</div>
-                    </div>
-                    <div class="panel-card-mystery" data-type="standard">
-                        <img src="/panel_premium.png" alt="Panel 4" class="panel-preview">
-                        <div class="mystery-tag">Solar Panel D</div>
-                    </div>
-                    <div class="panel-card-mystery" data-type="leaking">
-                        <img src="/panel_defective.png" alt="Panel 5" class="panel-preview">
-                        <div class="mystery-tag">Solar Panel E</div>
-                    </div>
-                    <div class="panel-card-mystery" data-type="solar-square">
-                        <img src="/panel_premium.png" alt="Panel 6" class="panel-preview">
-                        <div class="mystery-tag">Solar Panel F</div>
+                    <!-- Manual Testing Fallback (Only visible if sheet is slow) -->
+                    <div class="manual-test-row"
+                        style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; opacity: 0.5;">
+                        <button class="test-panel-btn" data-panel="premium">Premium</button>
+                        <button class="test-panel-btn" data-panel="microcrack">Micro-crack</button>
+                        <button class="test-panel-btn" data-panel="solar-square">SolarSquare</button>
                     </div>
                 </div>
             </div>
@@ -149,86 +140,84 @@
             </div>
         </div>
 
-        <!-- Section 2: Shadow Analysis Redesign -->
-        <div id="shadow-analysis-view" class="view-screen hidden">
+        <!-- Section 2: Shadow Analysis Redesign (Image Replica) -->
+        <div id="shadow-analysis-view" class="view-screen hidden shadow-tv-theme">
             <div class="shadow-experience-wrap">
-                <div class="impact-content-layout">
+                <div class="shadow-header">
+                    <h1 class="shadow-main-title">Impact of Shadow on Generation</h1>
+                </div>
 
-                    <!-- Left Side: Graph & Title -->
-                    <div class="impact-main-area">
-                        <h1 class="image-title">Impact of Shadow on Generation</h1>
-
-                        <div class="graph-box-premium">
-                            <!-- Real-time Percentage Pill (Absolute inside graph) -->
-                            <div class="live-pill">
-                                <span class="pill-dot"></span>
-                                <span id="gen-pct">100</span>%
-                            </div>
-
-                            <canvas id="shadow-graph-canvas"></canvas>
-
-                            <!-- Axis Labels matching image -->
-                            <div class="axis-lbl-y">% Generation</div>
-                            <div class="axis-lbl-x">Time (Sec)</div>
-
-                            <!-- Interactive Panel Overlay (Draggable Area) -->
-                            <div id="panel-drop-zone" class="panel-drop zone-clean">
-                                <img src="/panel_premium.png" class="base-panel-img" alt="Panel">
-                                <div id="plate-on-panel" class="plate-on-panel"></div>
-                                <div class="drop-hint">DRAG PLATE HERE TO SEE IMPACT</div>
-                            </div>
+                <div class="shadow-split-layout">
+                    <!-- Left Column: Graph View -->
+                    <div class="shadow-graph-area">
+                        <div class="efficiency-pill-badge">
+                            <span class="pill-icon">☀️</span>
+                            <span id="gen-pct">100</span>%
                         </div>
 
-                        <!-- Draggable Tray -->
-                        <div class="plate-tray-new">
-                            <div class="plate-item draggable" draggable="true" data-sample="dust">
-                                <img src="/dust_slide.png" alt="Dust">
-                                <div class="plate-name">Dust Layer</div>
-                            </div>
-                            <div class="plate-item draggable" draggable="true" data-sample="bird">
-                                <img src="/bird_slide.png" alt="Bird">
-                                <div class="plate-name">Bird Drops</div>
-                            </div>
-                            <div class="plate-item draggable" draggable="true" data-sample="leaf">
-                                <img src="/leaf_slide.png" alt="Leaf">
-                                <div class="plate-name">Dry Leaf</div>
-                            </div>
-                            <div class="plate-item reset-plate" data-sample="clear">
-                                <div class="reset-icon">↺</div>
-                                <div class="plate-name">Clean Panel</div>
-                            </div>
+                        <div class="graph-container-replica">
+                            <canvas id="shadow-graph-canvas"></canvas>
+
+                            <div id="graph-tooltip" class="graph-tooltip">0 Watts</div>
+
+                            <!-- Graph Axis Labels -->
+                            <div class="replica-axis-label-y">% Generation</div>
+                            <div class="replica-axis-label-x">Time (Sec)</div>
                         </div>
                     </div>
 
-                    <!-- Right Side: White TV Cards -->
-                    <div class="impact-details-area">
-                        <div class="tv-card main-stats">
-                            <p class="tv-intro">Solar Plants in India suffer from shadow losses of up to 25%*, causing
+                    <!-- Right Column: Metrics Cards -->
+                    <div class="shadow-metrics-area">
+                        <div class="white-stats-card">
+                            <p class="stats-intro">Solar Plants in India suffer from shadow losses of upto 25%*, causing
                             </p>
 
-                            <div class="tv-stat-row">
-                                <h1 id="energy-loss" class="tv-value-red">1,100</h1>
-                                <span class="tv-label">Units/Year <br> Energy Loss</span>
+                            <div class="stat-block">
+                                <h1 id="metric-energy-loss" class="stat-value-red">1,100</h1>
+                                <span class="stat-unit">Units/Year <br> Energy Loss</span>
                             </div>
 
-                            <div class="tv-stat-row">
-                                <h1 id="money-loss" class="tv-value-red">₹ 13,400</h1>
-                                <span class="tv-label">/year <br> Savings Loss</span>
+                            <div class="stat-block mt-large">
+                                <h1 id="metric-savings-loss" class="stat-value-red">₹13,400</h1>
+                                <span class="stat-unit">/year <br> Savings Loss</span>
                             </div>
 
-                            <p class="tv-disclaimer">
+                            <div class="stats-live-data">
+                                <div class="live-item">
+                                    <span class="live-label">LIVE VOLTAGE (V)</span>
+                                    <span id="live-voltage" class="live-val">42.8</span>
+                                </div>
+                                <div class="live-item">
+                                    <span class="live-label">LIVE CURRENT (A)</span>
+                                    <span id="live-current" class="live-val">9.4</span>
+                                </div>
+                            </div>
+
+                            <p class="stats-disclaimer">
                                 *CEEW Report - 'kWh from kW': Insights from Field Visits in Delhi.<br>
                                 All calculations assume a 3.24 kW system
                             </p>
                         </div>
 
-                        <div class="tv-card guide-card">
-                            <div class="guide-content">
-                                <p>See what else reduces your generation.</p>
-                                <strong>Switch the plate to view &darr;</strong>
+                        <div class="diagnostic-advice-card white-stats-card mt-medium">
+                            <div class="advice-header">
+                                <span class="action-icon">✨</span>
+                                <h3 id="advice-title">OPTIMAL GENERATION</h3>
                             </div>
-                            <div class="guide-image">
-                                <img id="guide-thumb" src="/panel_premium.png" alt="guide">
+                            <p id="advice-desc">System is performing at peak efficiency. No shadows detected on current string.</p>
+                            <div class="advice-footer">
+                                <strong id="hint-text">SYSTEM HEALTH PERFECT</strong>
+                            </div>
+                        </div>
+
+                        <div class="hint-card-white">
+                            <div class="hint-text-wrap">
+                                <p>See what else reduces your generation.</p>
+                                <strong>Switch the plate to view</strong>
+                            </div>
+                            <div class="hint-graphic">
+                                <img src="/panel_premium.png" alt="panel">
+                                <div class="hint-arrow">︾</div>
                             </div>
                         </div>
                     </div>
