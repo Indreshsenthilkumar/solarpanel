@@ -223,12 +223,11 @@ class ExperienceCentre {
                 const hasChanged = data.activePanel !== this.lastActivePanel;
 
                 if (hasChanged || isWaitingOnSelectView) {
-                    console.log("Triggering Transition for:", data.activePanel);
                     this.lastActivePanel = data.activePanel;
-                    if (this.currentView === 'landing' || this.currentView === 'landing-page') {
-                        this.switchView('solar-selection-view');
+                    // Only auto-trigger the scanning flow if the user has ALREADY entered the selection view
+                    if (this.currentView === 'solar-selection-view' || this.currentView === 'solar-result-screen') {
+                        this.triggerAutomaticTransition(data.activePanel);
                     }
-                    this.triggerAutomaticTransition(data.activePanel);
                 }
             } else {
                 this.lastActivePanel = null;
