@@ -3415,9 +3415,9 @@ body {
 
 .shadow-tv-theme .graph-y-labels {
     position: absolute;
-    left: -4rem; /* Moved further left to clear the grid border */
-    top: 2.5rem;
-    bottom: 3.5rem;
+    left: -4rem; 
+    top: 2.5rem; /* Exactly matches canvas top padding */
+    bottom: 3.5rem; /* Exactly matches canvas bottom padding */
     display: flex;
     flex-direction: column;
     justify-content: space-between;

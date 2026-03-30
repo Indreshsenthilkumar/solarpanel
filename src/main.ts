@@ -922,7 +922,7 @@ class ExperienceCentre {
         const h = this.graphCanvas!.height;
         
         // Internal padding to keep all labels and data perfectly visible
-        const padding = { top: 40, right: 40, bottom: 60, left: 100 };
+        const padding = { top: 25, right: 40, bottom: 35, left: 60 }; // Aligned with CSS adjustments
         const graphW = w - padding.left - padding.right;
         const graphH = h - padding.top - padding.bottom;
         
