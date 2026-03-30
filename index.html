@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarSquare | Interactive Experience Simulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Background Animation Canvas -->
+        <canvas id="bg-canvas"></canvas>
+
+        <!-- Dashboard Header -->
+
+        <header class="main-header">
+            <div class="brand-logo-wrap">
+                <div class="brand-top-row">
+                    <!-- Kondaas Diamond Icon SVG -->
+                    <div class="brand-icon">
+                        <img src="/kondaas_logo.png" alt="Kondaas logo" class="brand-logo-img">
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name-bold">Kondaas</span>
+                        <span class="brand-divider">|</span>
+                        <span class="brand-name-light">SOLAR SYSTEMS</span>
+                    </div>
+                </div>
+                <div class="brand-tagline">Best Solar Installer Across South India</div>
+            </div>
+            <button id="back-to-menu" class="back-btn hidden">← Main Menu</button>
+        </header>
+
+        <!-- Landing Page: The Two Boxes -->
+        <div id="landing-page" class="view-screen">
+            <div class="cards-container">
+                <div class="experience-card" id="btn-which-solar">
+                    <div class="card-image-wrap">
+                        <img src="/panel_premium.png" alt="Solar Panel" class="card-main-image">
+                    </div>
+                    <h2>Which one is good solar?</h2>
+                    <p>Compare different panels and see their long-term financial impact.</p>
+                </div>
+                <div class="experience-card" id="btn-shadow-analysis">
+                    <div class="card-image-wrap">
+                        <img src="/roof_solar.png" alt="Shadow Analysis" class="card-main-image">
+                    </div>
+                    <h2>Shadow Analysis</h2>
+                    <p>See how everyday conditions like dust and birds affect your generation.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Automated Solar Selection -->
+        <div id="solar-selection-view" class="view-screen hidden">
+            <div class="ad-layout-container">
+                <!-- Top Brand Header -->
+                <div class="ad-header">
+                    <button id="ad-back-btn" class="ad-back-link">← Back to Home</button>
+                    <div class="ad-logo">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+                            <rect width="40" height="40" rx="6" fill="#D71920" />
+                            <path d="M20 6 L34 20 L20 34 L6 20 Z" fill="white" />
+                            <path d="M20 12 L28 20 L20 28 L12 20 Z" fill="#D71920" />
+                        </svg>
+                        <div class="ad-logo-text">
+                            <span class="bt-bold">Kondaas</span>
+                            <span class="bt-light">SOLAR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Body -->
+                <div class="ad-content-grid">
+                    <div class="ad-text-block">
+                        <h1 id="ad-headline" class="ad-main-headline">
+                            45% of panels installed on rooftop solar plants in India show micro-defects
+                        </h1>
+                        <p id="ad-subheadline" class="ad-sub-headline">
+                            EL imaging is the X-ray for solar panels — it finds internal micro-defects
+                        </p>
+
+                        <div class="ad-buzzer-card">
+                            <p class="buzzer-status-text">One in six panels is defect free. <br> <strong>Press the
+                                    buzzer
+                                    to select</strong></p>
+                            <div class="buzzer-graphic-wrap">
+                                <div class="buzzer-glow"></div>
+                                <div class="buzzer-top"></div>
+                                <div class="buzzer-base"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right side visual card -->
+                    <div class="ad-visual-block">
+                        <div class="ad-image-card">
+                            <img src="/solar_ad_card_visual.png" alt="Premium Solar Panel" class="ad-panel-image">
+                            <div class="ad-image-badge">A+ GRADE QUALITY</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden polling status for debugging if needed -->
+                <div id="fetching-status" class="hidden">
+                    <p class="status-subtitle">Monitoring Google Sheet...</p>
+                </div>
+            </div>
+
+            <!-- Scanning Animation Overlay -->
+            <div id="scanning-overlay" class="fullscreen-overlay hidden">
+                <div class="scanner-wrap">
+                    <div class="scanning-panel-box">
+                        <img id="scanning-img" src="" alt="Scanning">
+                        <div class="scan-bar"></div>
+                        <div class="scan-laser"></div>
+                    </div>
+                    <div class="scan-status-text">PERFORMING ELECTROLUMINESCENCE SCAN...</div>
+                    <div class="scan-metrics">
+                        <div class="metric">CELL INTEGRITY: <span id="scan-integrity">---</span></div>
+                        <div class="metric">THERMAL LEAKAGE: <span id="scan-thermal">---</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Solar Result Screen (Full Page) -->
+        <div id="solar-result-screen" class="view-screen hidden">
+            <div class="result-tv-wrap">
+
+                <!-- TOP: Headline row -->
+                <div class="result-tv-header">
+                    <div class="result-tv-headline-block">
+                        <div class="result-title-row">
+                            <span id="result-caution-icon" class="caution-icon"></span>
+                            <h1 class="result-tv-headline">
+                                <span id="result-brand-name" class="brand-name-red">Solar Panel</span>
+                                <span id="result-status-suffix" class="status-suffix">Selected</span>
+                            </h1>
+                        </div>
+                        <p id="solar-result-subtitle" class="result-tv-tagline">Basic Performance Solar Panel</p>
+                        <div id="header-status-pill" class="header-status-pill red-pill">
+                            <span class="pill-icon"></span>
+                            <span id="header-status-text" class="pill-label">LOW EFFICIENCY</span>
+                        </div>
+                    </div>
+                    <div class="result-header-actions">
+                        <button id="result-reset-btn" class="reset-action-btn">
+                            <span class="refresh-icon">↺</span> Reset Scan
+                        </button>
+                    </div>
+                    <div class="result-tv-logo">
+                        <img src="/kondaas_logo.png" alt="Kondaas logo" class="brand-logo-img">
+                        <div class="result-tv-logo-text">
+                            <span class="rtl-bold">Kondaas</span>
+                            <span class="rtl-light">SOLAR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM: Two cards -->
+                <!-- BOTTOM: Two-column card layout -->
+                <div class="result-tv-cards">
+                    <!-- Left Column: Score and Savings -->
+                    <div class="result-col-left">
+                        <div class="result-card-mini performance-score-card">
+                            <div class="card-mini-header">
+                                <span class="mini-icon red-icon">💡</span>
+                                <span class="mini-title">Performance Score</span>
+                            </div>
+                            <div class="gauge-wrap">
+                                <svg viewBox="0 0 200 100" class="gauge-svg">
+                                    <path d="M20 90 A80 80 0 0 1 180 90" fill="none" class="gauge-bg-path" stroke-width="12" stroke-linecap="round"/>
+                                    <path id="performance-gauge-fill-svg" d="M20 90 A80 80 0 0 1 180 90" fill="none" class="gauge-fill-path" stroke-width="12" stroke-linecap="round"/>
+                                </svg>
+                                <div class="gauge-center">
+                                    <span id="performance-score-val" class="score-text">6.0</span>
+                                    <span class="score-out-of">/10</span>
+                                </div>
+                            </div>
+                            <p id="scan-count-text" class="card-mini-subtitle">Based on 87 Scans</p>
+                        </div>
+                        <div class="result-card-mini life-savings-card">
+                            <div class="card-mini-header">
+                                <span class="mini-icon green-icon">🌳</span>
+                                <span class="mini-title">Estimated Life Savings</span>
+                            </div>
+                            <div class="savings-amount-block">
+                                <span id="result-lifetime-savings" class="savings-large">₹ 5,12,500</span>
+                                <p class="savings-duration">Over 25 Years</p>
+                            </div>
+                        </div>
+
+                        <div class="result-card-mini carbon-impact-card">
+                            <div class="card-mini-header">
+                                <span class="mini-icon green-icon">🌱</span>
+                                <span class="mini-title">Environmental Impact</span>
+                            </div>
+                            <div class="carbon-amount-block">
+                                <span id="result-carbon-offset" class="carbon-large">245 Tonnes</span>
+                                <p class="carbon-subtitle">CO₂ Emissions Reduced</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Column: Detailed Specs Table -->
+                    <div class="result-col-middle">
+                        <div class="result-card-large performance-details-card">
+                            <h2 class="table-card-title">Performance Details</h2>
+                            <div class="details-table">
+                                <div class="table-row">
+                                    <span class="table-label">Brand</span>
+                                    <span id="spec-brand" class="table-value brand-red">Goldi Solar</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Cell Technology</span>
+                                    <span id="spec-tech" class="table-value">Mono PERC</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Power Range</span>
+                                    <span id="spec-power" class="table-value">525 – 600 W</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Max Efficiency</span>
+                                    <span id="spec-efficiency" class="table-value">~20 %</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Warranty (Product)</span>
+                                    <span id="spec-warranty-product" class="table-value">10 Years</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Performance</span>
+                                    <span id="spec-warranty-perf" class="table-value">25 Years</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Temp. Coefficient</span>
+                                    <span id="spec-temp" class="table-value">-0.35 % / °C</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Bifaciality</span>
+                                    <span id="spec-bifacial" class="table-value">~70 %</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">System Voltage</span>
+                                    <span id="spec-voltage" class="table-value">1500 V</span>
+                                </div>
+                                <div class="table-row">
+                                    <span class="table-label">Panel Weight</span>
+                                    <span id="spec-weight" class="table-value">29 kg</span>
+                                </div>
+                            </div>
+                            
+                            <div class="results-extra-content">
+                                <div class="best-for-section">
+                                    <h3 class="extra-label">Best Suited For</h3>
+                                    <div id="spec-best-for" class="best-for-tags">
+                                        <span class="tag">Residential</span>
+                                        <span class="tag">Cost Effective</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="expert-opinion-box">
+                                    <div class="expert-header">
+                                        <span class="expert-sparkle">✦</span>
+                                        <span class="expert-title">Expert Opinion</span>
+                                    </div>
+                                    <p id="spec-description" class="expert-text">
+                                        Good choice for basic residential setups where upfront cost is the primary concern.
+                                    </p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Visual and Upsell CTA -->
+                    <div class="result-col-right">
+                        <div class="result-card-visual el-visual-card">
+                            <div class="visual-container">
+                                <canvas id="el-result-canvas"></canvas>
+                                <div id="visual-status-pill" class="visual-overlay-status red-overlay">
+                                    <span class="status-icon">⚠</span>
+                                    <span id="visual-status-text" class="status-text">LOW EFFICIENCY</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-card-mini results-summary-card">
+                            <h2 class="summary-card-title">Performance Details</h2>
+                            <div class="summary-list">
+                                <div class="summary-item">
+                                    <div class="item-icon-box">🏢</div>
+                                    <span id="sum-brand" class="sum-text">Goldi Solar</span>
+                                    <span class="sum-arrow">›</span>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="item-icon-box">⚙️</div>
+                                    <span id="sum-tech" class="sum-text">Mono PERC</span>
+                                    <span class="sum-arrow">›</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-card-cta adani-upsell-card">
+                            <div class="adani-cta-decor">
+                                <span class="decor-sparkle">✨</span>
+                                <span class="decor-trophy">🏆</span>
+                            </div>
+                            <div class="cta-inner-grid">
+                                <div class="cta-header-text">
+                                    <h3 class="cta-main-title">Try Adani Solar <span>for better</span></h3>
+                                    <p class="cta-sub-score">Get an estimated score 8.5 / 10</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Section 2: Shadow Analysis Redesign (Image Replica) -->
+        <div id="shadow-analysis-view" class="view-screen hidden shadow-tv-theme">
+            <div class="result-tv-wrap">
+                <!-- TOP: Headline row -->
+                <div class="result-tv-header">
+                    <div class="result-tv-headline-block">
+                        <h1 class="result-tv-headline">Impact of Shadow on Generation</h1>
+                        <p class="result-tv-tagline">Real-time analysis of efficiency loss due to environmental shading.</p>
+                    </div>
+                    
+                    <button id="shadow-back-btn" class="mockup-menu-btn">
+                         Main Menu ⟶
+                    </button>
+                </div>
+
+                <div class="result-tv-cards">
+                    <!-- Left Column: Graph View (Framed like EL Scan) -->
+                    <div class="result-el-card shadow-graph-frame">
+
+
+                        <div class="graph-container-replica">
+                            <!-- Y-Axis Labels -->
+                            <div class="graph-y-labels">
+                                <span>120%</span>
+                                <span>100%</span>
+                                <span>80%</span>
+                                <span>60%</span>
+                                <span>40%</span>
+                                <span>20%</span>
+                                <span>0%</span>
+                            </div>
+
+                            <canvas id="shadow-graph-canvas"></canvas>
+
+                            <!-- Graph Axis Labels -->
+                            <div class="replica-axis-label-y">Live Solar Performance %</div>
+                            <div class="replica-axis-label-x">Time (Live Performance)</div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Metrics Cards (Styled like Savings Card) -->
+                    <div class="result-savings-card">
+                        <div class="panel-specs-container">
+                            <div class="specs-highlight-badge">Live Performance Analysis</div>
+
+
+
+                            <div class="stat-row-premium">
+                                <div class="stat-main">
+                                    <h1 id="metric-live-pct" class="result-amount">100</h1>
+                                    <span class="result-period">% EFFICIENCY</span>
+                                </div>
+                                <p class="stat-sub-label">Live System Performance</p>
+                            </div>
+
+                            <div class="specs-grid">
+                                <div class="spec-row">
+                                    <span class="spec-label"><i>⚡</i> Est. Energy Loss</span>
+                                    <span id="metric-energy-loss" class="spec-value">1,100 Units/Year</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label"><i>₹</i> Financial Loss</span>
+                                    <span id="metric-savings-loss" class="spec-value">₹13,400 / Year</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label"><i>V</i> Live Voltage</span>
+                                    <span id="live-voltage" class="spec-value">42.8 V</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label"><i>A</i> Live Current</span>
+                                    <span id="live-current" class="spec-value">9.4 A</span>
+                                </div>
+                            </div>
+
+                            <div id="shadow-advice-box" class="shadow-advice-card">
+                                <div class="expert-header">
+                                    <span class="expert-icon">✔</span> OPTIMAL GENERATION
+                                </div>
+                                <p id="advice-desc" class="expert-text">
+                                    System is performing at peak efficiency. No shadows detected on currrent string.
+                                </p>
+                                <span id="hint-text" class="status-hint-pill">SYSTEM HEALTH PERFECT</span>
+                            </div>
+
+                            <p class="result-fine-print">
+                                *Calculations based on CEEW report 'kWh from kW'. Performance assumes a 3.24 kW standard
+                                residential system.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
