@@ -3402,10 +3402,10 @@ body {
 
 .shadow-tv-theme .replica-axis-label-y {
     position: absolute;
-    left: -5rem; /* Moved closer to the numbers but distinct */
+    left: -7rem; /* Moved further left to clear numbers */
     top: 50%;
     transform: rotate(-90deg) translateY(-50%);
-    color: #64748b; /* Professional muted gray */
+    color: #64748b;
     font-weight: 800;
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -3415,9 +3415,9 @@ body {
 
 .shadow-tv-theme .graph-y-labels {
     position: absolute;
-    left: -2.8rem; /* Fine-tuned for the new canvas padding */
-    top: 2.5rem; /* Match the canvas top padding */
-    bottom: 3.5rem; /* Match the canvas bottom padding */
+    left: -4rem; /* Moved further left to clear the grid border */
+    top: 2.5rem;
+    bottom: 3.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
