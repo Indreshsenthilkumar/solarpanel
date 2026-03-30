@@ -3415,23 +3415,24 @@ body {
 
 .shadow-tv-theme .graph-y-labels {
     position: absolute;
-    left: -4rem; 
-    top: 2.5rem; /* Exactly matches canvas top padding */
-    bottom: 3.5rem; /* Exactly matches canvas bottom padding */
+    left: -4.5rem; 
+    top: 2.5rem; /* Matches the 25px top padding in TS */
+    bottom: 3.5rem; /* Matches the 35px bottom padding in TS */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100% - 6rem);
-    z-index: 5;
+    height: auto;
+    z-index: 10;
     text-align: right;
     pointer-events: none;
 }
 
 .shadow-tv-theme .graph-y-labels span {
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: #475569;
-    line-height: 1;
+    font-size: 0.85rem;
+    font-weight: 850;
+    color: #4b5563;
+    line-height: 0;
+    transform: translateY(-1px); /* Visual nudge for center alignment */
 }
 
 .shadow-tv-theme .replica-axis-label-x {
